@@ -1,0 +1,23 @@
+{
+  "name": "apigee-portal-module",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "tayers",
+  "homepage": "https://github.com/open-portal-initiative/apigee-portal-module",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "google-auth-library": "^9.15.1"
+  }
+}
