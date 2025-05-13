@@ -34,6 +34,26 @@ export interface ApiHubApi {
   attributes: {[key: string]: ApiHubAttribute}
 }
 
+export interface ApiHubApiVersion {
+  name: string,
+  displayName: string,
+  description: string,
+  createTime: string,
+  updateTime: string,
+  documentation?: {externalUri: string},
+  specs?: string[],
+  apiOperations?: string[],
+  definitions?: string[],
+  deployments?: string[],
+  attributes?: {[key: string]: ApiHubAttribute}
+}
+
+export interface ApiHubApiVersionSpecContents {
+  contents: string,
+  mimeType: string
+}
+
+
 export interface ApiHubAttribute {
   attribute: string,
   enumValues: {

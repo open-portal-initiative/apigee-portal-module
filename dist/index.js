@@ -43,6 +43,50 @@ export class PortalService {
             }
         });
     }
+    // returns a an api version object
+    getApiVersion(apiName_1, apiVersion_1) {
+        return __awaiter(this, arguments, void 0, function* (apiName, apiVersion, org = "", region = "") {
+            let token = yield auth.getAccessToken();
+            let tempOrg = org ? org : this.org;
+            let tempRegion = region ? region : this.region;
+            let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}/versions/${apiVersion}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // returns the contents of a version spec
+    getApiVersionSpecContents(apiName_1, apiVersion_1, specName_1) {
+        return __awaiter(this, arguments, void 0, function* (apiName, apiVersion, specName, org = "", region = "") {
+            let token = yield auth.getAccessToken();
+            let tempOrg = org ? org : this.org;
+            let tempRegion = region ? region : this.region;
+            let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}/versions/${apiVersion}/specs/${specName}:contents`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
     // returns a developer object or an error object if the developer does not exist
     getDeveloper(email) {
         return __awaiter(this, void 0, void 0, function* () {
