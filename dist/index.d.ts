@@ -1,5 +1,5 @@
 import { ApigeeDeveloper, ApiHubApis, ApiHubApiVersion, ApiHubApiVersionSpecContents, Error } from './interfaces.js';
-export type { ApigeeDeveloper, ApiHubApis, ApiHubApiVersion, ApiHubApiVersionSpecContents, Error } from './interfaces.js';
+export type { ApigeeDeveloper, ApiHubApis, ApiHubApi, ApiHubApiVersion, ApiHubApiVersionSpecContents, Error } from './interfaces.js';
 export declare class PortalService {
     private org;
     private region;

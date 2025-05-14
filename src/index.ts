@@ -4,7 +4,7 @@ const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform'
 });
 
-export type { ApigeeDeveloper, ApiHubApis, ApiHubApiVersion, ApiHubApiVersionSpecContents, Error } from './interfaces.js';
+export type { ApigeeDeveloper, ApiHubApis, ApiHubApi, ApiHubApiVersion, ApiHubApiVersionSpecContents, Error } from './interfaces.js';
 
 export class PortalService {
 
