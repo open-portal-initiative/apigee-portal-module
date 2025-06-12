@@ -88,10 +88,181 @@ export class PortalService {
         });
     }
     // returns a developer object or an error object if the developer does not exist
+    createDeveloper(developer) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(developer)
+            });
+            if (response.status === 201) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // deletes a developer object or an error object if the developer does not exist
+    deleteDeveloper(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // returns a developer object or an error object if the developer does not exist
     getDeveloper(email) {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // returns an app object or an error object if the developer does not exist
+    createApp(email, appName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: appName,
+                    apiProducts: [],
+                })
+            });
+            if (response.status === 201) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // update app key products
+    addAppKeyProducts(email, appName, keyName, products) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    apiProducts: products,
+                })
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // remove app key product
+    removeAppKeyProduct(email, appName, keyName, product) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}/apiproducts/${product}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // returns a developer object or an error object if the developer does not exist
+    getApp(email, appName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // returns a developer object or an error object if the developer does not exist
+    getApps(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps?expand=true`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return [data, null];
+            }
+            else {
+                let data = yield response.json();
+                return [null, data];
+            }
+        });
+    }
+    // gets all of the products
+    getProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/apiproducts?expand=true`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`

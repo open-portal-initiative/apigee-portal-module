@@ -165,7 +165,8 @@ export class PortalService {
     }
   }
 
-  async updateAppKeyProducts(email: string, appName: string, keyName: string, products: string[]): Promise<[ApigeeAppKey, Error]>  {
+  // update app key products
+  async addAppKeyProducts(email: string, appName: string, keyName: string, products: string[]): Promise<[ApigeeAppKey, Error]>  {
     let token = await auth.getAccessToken();
     let response = await fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}`, {
       method: 'POST',
@@ -176,6 +177,25 @@ export class PortalService {
       body: JSON.stringify({
         apiProducts: products,
       })
+    });
+
+    if (response.status === 200) {
+      let data = await response.json() as ApigeeAppKey;
+      return [data, null];
+    } else {
+      let data = await response.json() as Error;
+      return [null, data];
+    }
+  }
+
+  // remove app key product
+  async removeAppKeyProduct(email: string, appName: string, keyName: string, product: string): Promise<[ApigeeAppKey, Error]>  {
+    let token = await auth.getAccessToken();
+    let response = await fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}/apiproducts/${product}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
 
     if (response.status === 200) {

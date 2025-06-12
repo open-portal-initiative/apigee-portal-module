@@ -80,8 +80,8 @@ test("add product to developer app key", async () => {
       productResult[0].apiProduct[0].name
     ]
     let keyName = appResult[0].credentials[0].consumerKey ?? "";
-    return service.updateAppKeyProducts("test@example.com", "test-app", keyName, products).then((result: [ApigeeAppKey, Error]) => {
-      console.log(JSON.stringify(result));
+    return service.addAppKeyProducts("test@example.com", "test-app", keyName, products).then((result: [ApigeeAppKey, Error]) => {
+      //console.log(JSON.stringify(result));
       let errorCode = -1;
       if (result[1]) {
         errorCode = result[1].error.code;
@@ -89,6 +89,30 @@ test("add product to developer app key", async () => {
       }
       expect(errorCode).toEqual(-1);
       expect(result[0].apiProducts?.length).toEqual(1);
+    });
+  }
+});
+
+test("remove product from developer app key", async () => {
+  let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
+  let service = new PortalService(org, "");
+
+  let appResult = await service.getApp("test@example.com", "test-app");
+
+  expect(appResult[0].credentials).not.toBeNull();
+
+  if (appResult[0].credentials) {
+    let keyName = appResult[0].credentials[0].consumerKey ?? "";
+    let apiProductName = appResult[0].credentials[0].apiProducts?.[0].apiproduct ?? "";
+    return service.removeAppKeyProduct("test@example.com", "test-app", keyName, apiProductName).then((result: [ApigeeAppKey, Error]) => {
+      console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result[1]) {
+        errorCode = result[1].error.code;
+        console.log(JSON.stringify(result[1]));
+      }
+      expect(errorCode).toEqual(-1);
+      expect(result[0].apiProducts?.length).toEqual(0);
     });
   }
 });
