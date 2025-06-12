@@ -1,16 +1,64 @@
 export interface ApigeeDeveloper {
   developerId?: string;
-  organizationName: string;
-  createdAt: string;
-  lastModifiedAt: string;
+  organizationName?: string;
+  createdAt?: string;
+  lastModifiedAt?: string;
   email: string;
   firstName: string;
   lastName: string;
   userName: string;
   status?: string;
-  apps: string[];
-  attributes: KeyValue[];
+  apps?: string[];
+  attributes?: KeyValue[];
   error?: Error;
+}
+
+export interface ApigeeApiProducts {
+  apiProduct: ApigeeApiProduct[];
+}
+
+export interface ApigeeApiProduct {
+  name: string;
+  displayName: string;
+  description: string;
+  approvalType: string;
+  attributes: KeyValue[];
+}
+
+export interface ApigeeApps {
+  app: ApigeeApp[];
+  error?: Error;
+}
+
+export interface ApigeeApp {
+  appId: string;
+  name: string;
+  status?: string;
+  callbackUrl?: string;
+  createdAt?: string;
+  credentials?: ApigeeAppKey[];
+  apiProducts?: string[];
+  error?: Error;
+  attributes: KeyValue[];
+}
+
+export interface ApigeeAppKey {
+  consumerKey?: string;
+  consumerSecret?: string;
+  issuedAt?: string;
+  expiresAt?: string;
+  scopes?: string[];
+  status?: string;
+  apiProducts?: ApigeeApiProductName[];
+}
+
+export interface ApigeeApiProductName {
+  apiproduct: string;
+  status: string;
+}
+
+export interface ApigeeAccessToken {
+  access_token: string;
 }
 
 export interface ApiHubApis {
