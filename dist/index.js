@@ -7,9 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { GoogleAuth } from 'google-auth-library';
+import { GoogleAuth } from "google-auth-library";
 const auth = new GoogleAuth({
-    scopes: 'https://www.googleapis.com/auth/cloud-platform'
+    scopes: "https://www.googleapis.com/auth/cloud-platform",
 });
 export class PortalService {
     // constructor
@@ -28,62 +28,59 @@ export class PortalService {
             let tempOrg = org ? org : this.org;
             let tempRegion = region ? region : this.region;
             let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis?filter=${filter}&pageSize=${pageSize}&pageToken=${pageToken}`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
-                return [data, null];
+                let data = (yield response.json());
+                return data.apis;
             }
             else {
-                let data = yield response.json();
-                return [null, data];
+                let data = (yield response.json());
+                console.log(data.error.code.toString() + " - " + data.error.message);
+                return data;
             }
         });
     }
     // returns a an api version object
-    getApiVersion(apiName_1, apiVersion_1) {
-        return __awaiter(this, arguments, void 0, function* (apiName, apiVersion, org = "", region = "") {
+    getApiVersion(apiVersion) {
+        return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
-            let tempOrg = org ? org : this.org;
-            let tempRegion = region ? region : this.region;
-            let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}/versions/${apiVersion}`, {
-                method: 'GET',
+            let response = yield fetch(`https://apihub.googleapis.com/v1/${apiVersion}`, {
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
-                return [data, null];
+                let data = (yield response.json());
+                return data;
             }
             else {
-                let data = yield response.json();
-                return [null, data];
+                let data = (yield response.json());
+                return data;
             }
         });
     }
     // returns the contents of a version spec
-    getApiVersionSpecContents(apiName_1, apiVersion_1, specName_1) {
-        return __awaiter(this, arguments, void 0, function* (apiName, apiVersion, specName, org = "", region = "") {
+    getApiVersionSpecContents(apiVersionSpec) {
+        return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
-            let tempOrg = org ? org : this.org;
-            let tempRegion = region ? region : this.region;
-            let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}/versions/${apiVersion}/specs/${specName}:contents`, {
-                method: 'GET',
+            let response = yield fetch(`https://apihub.googleapis.com/v1/${apiVersionSpec}:contents`, {
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
-                return [data, null];
+                let data = (yield response.json());
+                return data;
             }
             else {
-                let data = yield response.json();
-                return [null, data];
+                let data = (yield response.json());
+                return data;
             }
         });
     }
@@ -92,19 +89,19 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    "Content-Type": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(developer)
+                body: JSON.stringify(developer),
             });
             if (response.status === 201) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -114,17 +111,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}`, {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -134,17 +131,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -154,22 +151,22 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    "Content-Type": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     name: appName,
                     apiProducts: [],
-                })
+                }),
             });
             if (response.status === 201) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -179,21 +176,21 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    "Content-Type": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     apiProducts: products,
-                })
+                }),
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -203,17 +200,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}/keys/${keyName}/apiproducts/${product}`, {
-                method: 'DELETE',
+                method: "DELETE",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -223,17 +220,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps/${appName}`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -243,17 +240,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/developers/${email}/apps?expand=true`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
@@ -263,17 +260,17 @@ export class PortalService {
         return __awaiter(this, void 0, void 0, function* () {
             let token = yield auth.getAccessToken();
             let response = yield fetch(`https://apigee.googleapis.com/v1/organizations/${this.org}/apiproducts?expand=true`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (response.status === 200) {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [data, null];
             }
             else {
-                let data = yield response.json();
+                let data = (yield response.json());
                 return [null, data];
             }
         });
