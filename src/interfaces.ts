@@ -61,59 +61,54 @@ export interface ApigeeAccessToken {
   access_token: string;
 }
 
-export interface ApiHubApis {
-  apis: ApiHubApi[];
-}
-
 export interface ApiHubApi {
-  name: string,
-  displayName: string,
-  description: string,
-  documentation: {externalUri: string},
-  owner: {displayName: string, email: string},
-  versions: string[],
-  createTime: string,
-  updateTime: string,
-  targetUser: ApiHubAttribute,
-  team: ApiHubAttribute,
-  businessUnit: ApiHubAttribute,
-  maturityLevel: ApiHubAttribute,
-  apiStyle: ApiHubAttribute,
-  attributes: {[key: string]: ApiHubAttribute}
+  name: string;
+  displayName: string;
+  description: string;
+  documentation: { externalUri: string };
+  owner: { displayName: string; email: string };
+  versions: string[];
+  createTime: string;
+  updateTime: string;
+  targetUser: ApiHubAttribute;
+  team: ApiHubAttribute;
+  businessUnit: ApiHubAttribute;
+  maturityLevel: ApiHubAttribute;
+  apiStyle: ApiHubAttribute;
+  attributes: { [key: string]: ApiHubAttribute };
 }
 
 export interface ApiHubApiVersion {
-  name: string,
-  displayName: string,
-  description: string,
-  createTime: string,
-  updateTime: string,
-  documentation?: {externalUri: string},
-  specs?: string[],
-  apiOperations?: string[],
-  definitions?: string[],
-  deployments?: string[],
-  attributes?: {[key: string]: ApiHubAttribute}
+  name: string;
+  displayName: string;
+  description: string;
+  createTime: string;
+  updateTime: string;
+  documentation?: { externalUri: string };
+  specs?: string[];
+  apiOperations?: string[];
+  definitions?: string[];
+  deployments?: string[];
+  attributes?: { [key: string]: ApiHubAttribute };
 }
 
 export interface ApiHubApiVersionSpecContents {
-  contents: string,
-  mimeType: string
+  contents: string;
+  mimeType: string;
 }
 
-
 export interface ApiHubAttribute {
-  attribute: string,
+  attribute: string;
   enumValues: {
-    values: ApiHubAttributeValue[]
-  }
+    values: ApiHubAttributeValue[];
+  };
 }
 
 export interface ApiHubAttributeValue {
-  id: string,
-  displayName: string,
-  description: string,
-  immutable: boolean
+  id: string;
+  displayName: string;
+  description: string;
+  immutable: boolean;
 }
 
 export interface KeyValue {
@@ -122,10 +117,6 @@ export interface KeyValue {
 }
 
 export interface Error {
-  error: ErrorDetail
-}
-
-export interface ErrorDetail {
   code: number;
   message: string;
   status: string;

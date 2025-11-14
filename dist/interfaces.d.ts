@@ -53,9 +53,6 @@ export interface ApigeeApiProductName {
 export interface ApigeeAccessToken {
     access_token: string;
 }
-export interface ApiHubApis {
-    apis: ApiHubApi[];
-}
 export interface ApiHubApi {
     name: string;
     displayName: string;
@@ -117,9 +114,6 @@ export interface KeyValue {
     value: string;
 }
 export interface Error {
-    error: ErrorDetail;
-}
-export interface ErrorDetail {
     code: number;
     message: string;
     status: string;

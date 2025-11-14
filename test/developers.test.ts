@@ -1,67 +1,78 @@
-import {expect, test} from "vitest";
-import { PortalService, Error, ApigeeDeveloper, ApiHubApis, ApigeeApps, ApigeeApp } from "../src";
+import { expect, test } from "vitest";
+import {
+  PortalService,
+  ApigeeDeveloper,
+  ApigeeApp,
+  ApigeeAppKey,
+  Error,
+} from "../src";
 import { error } from "console";
-import { ApigeeApiProducts, ApigeeAppKey } from "../src/interfaces";
 
-test("get nonexistant developer from nonexistant org", () => {
+test("get nonexistant developer from nonexistant org", async () => {
   let service = new PortalService("", "");
-  return service.getDeveloper("test@example.com").then((result: [ApigeeDeveloper, Error]) => {
-    //console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) errorCode = result[1].error.code;
-    expect(errorCode).toEqual(400);
-  });
+  return service
+    .getDeveloper("test@example.com")
+    .then((result: { data: ApigeeDeveloper; error: Error }) => {
+      //console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result.error) errorCode = result.error.code;
+      expect(errorCode).toEqual(400);
+    });
 });
 
-test("get nonexistant developer from existant org", () => {
+test("get nonexistant developer from existant org", async () => {
   let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
   let service = new PortalService(org, "");
-  return service.getDeveloper("test@example.com").then((result: [ApigeeDeveloper, Error]) => {
-    //console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) errorCode = result[1].error.code;
-    expect(errorCode).toEqual(404);
-  });
+  return service
+    .getDeveloper("test@example.com")
+    .then((result: { data: ApigeeDeveloper; error: Error }) => {
+      //console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result.error) errorCode = result.error.code;
+      expect(errorCode).toEqual(404);
+    });
 });
 
-test("create developer in an org", () => {
+test("create developer in an org", async () => {
   let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
   let newDeveloper: ApigeeDeveloper = {
     email: "test@example.com",
     firstName: "Test",
     lastName: "Developer",
-    userName: "test"
+    userName: "test",
   };
 
   let service = new PortalService(org, "");
-  return service.createDeveloper(newDeveloper).then((result: [ApigeeDeveloper, Error]) => {
-
-    // console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) {
-      errorCode = result[1].error.code;
-      console.log(JSON.stringify(result[1]));
-    }
-    expect(errorCode).toEqual(-1);
-    expect(result[0].email).toEqual(newDeveloper.email);
-  });
+  return service
+    .createDeveloper(newDeveloper)
+    .then((result: { data: ApigeeDeveloper; error: Error }) => {
+      // console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result[1]) {
+        errorCode = result[1].error.code;
+        console.log(JSON.stringify(result[1]));
+      }
+      expect(errorCode).toEqual(-1);
+      expect(result.data.email).toEqual(newDeveloper.email);
+    });
 });
 
-test("create developer app in an org", () => {
+test("create developer app in an org", async () => {
   let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
   let service = new PortalService(org, "");
 
-  return service.createApp("test@example.com", "test-app").then((result: [ApigeeApp, Error]) => {
-
-    //console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) {
-      errorCode = result[1].error.code;
-      console.log(JSON.stringify(result[1]));
-    }
-    expect(errorCode).toEqual(-1);
-    expect(result[0].name).toEqual("test-app");
-  });
+  return service
+    .createApp("test@example.com", "test-app")
+    .then((result: { data: ApigeeApp; error: Error }) => {
+      //console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result.error) {
+        errorCode = result.error.code;
+        console.log(JSON.stringify(result));
+      }
+      expect(errorCode).toEqual(-1);
+      expect(result.data.name).toEqual("test-app");
+    });
 });
 
 test("add product to developer app key", async () => {
@@ -71,25 +82,24 @@ test("add product to developer app key", async () => {
   let appResult = await service.getApp("test@example.com", "test-app");
   let productResult = await service.getProducts();
 
-  expect(productResult[0].apiProduct.length).greaterThan(0);
-  expect(appResult[0].credentials).not.toBeNull();
+  expect(productResult.data.apiProduct.length).greaterThan(0);
+  expect(appResult.data.credentials).not.toBeNull();
 
-  if (productResult[0].apiProduct.length > 0 && appResult[0].credentials) {
-    
-    let products: string[] = [
-      productResult[0].apiProduct[0].name
-    ]
-    let keyName = appResult[0].credentials[0].consumerKey ?? "";
-    return service.addAppKeyProducts("test@example.com", "test-app", keyName, products).then((result: [ApigeeAppKey, Error]) => {
-      //console.log(JSON.stringify(result));
-      let errorCode = -1;
-      if (result[1]) {
-        errorCode = result[1].error.code;
-        console.log(JSON.stringify(result[1]));
-      }
-      expect(errorCode).toEqual(-1);
-      expect(result[0].apiProducts?.length).toEqual(1);
-    });
+  if (productResult.data.apiProduct.length > 0 && appResult.data.credentials) {
+    let products: string[] = [productResult.data.apiProduct[0].name];
+    let keyName = appResult.data.credentials[0].consumerKey ?? "";
+    return service
+      .addAppKeyProducts("test@example.com", "test-app", keyName, products)
+      .then((result: { data: ApigeeAppKey; error: Error }) => {
+        //console.log(JSON.stringify(result));
+        let errorCode = -1;
+        if (result[1]) {
+          errorCode = result[1].error.code;
+          console.log(JSON.stringify(result[1]));
+        }
+        expect(errorCode).toEqual(-1);
+        expect(result.data.apiProducts?.length).toEqual(1);
+      });
   }
 });
 
@@ -99,52 +109,63 @@ test("remove product from developer app key", async () => {
 
   let appResult = await service.getApp("test@example.com", "test-app");
 
-  expect(appResult[0].credentials).not.toBeNull();
+  expect(appResult.data.credentials).not.toBeNull();
 
-  if (appResult[0].credentials) {
-    let keyName = appResult[0].credentials[0].consumerKey ?? "";
-    let apiProductName = appResult[0].credentials[0].apiProducts?.[0].apiproduct ?? "";
-    return service.removeAppKeyProduct("test@example.com", "test-app", keyName, apiProductName).then((result: [ApigeeAppKey, Error]) => {
-      console.log(JSON.stringify(result));
+  if (appResult.data.credentials) {
+    let keyName = appResult.data.credentials[0].consumerKey ?? "";
+    let apiProductName =
+      appResult.data.credentials[0].apiProducts?.[0].apiproduct ?? "";
+    return service
+      .removeAppKeyProduct(
+        "test@example.com",
+        "test-app",
+        keyName,
+        apiProductName,
+      )
+      .then((result: { data: ApigeeAppKey; error: Error }) => {
+        console.log(JSON.stringify(result));
+        let errorCode = -1;
+        if (result[1]) {
+          errorCode = result[1].error.code;
+          console.log(JSON.stringify(result[1]));
+        }
+        expect(errorCode).toEqual(-1);
+        expect(result.data.apiProducts?.length).toEqual(0);
+      });
+  }
+});
+
+test("get developer apps", async () => {
+  let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
+
+  let service = new PortalService(org, "");
+  return service
+    .getApps("test@example.com")
+    .then((result: { data: ApigeeApp[]; error: Error }) => {
+      //console.log(JSON.stringify(result));
+      let errorCode = -1;
+      if (result[1]) {
+        errorCode = result[1].error.code;
+        console.log(JSON.stringify(result[1]));
+      }
+      expect(result.data.length).toEqual(1);
+      expect(errorCode).toEqual(-1);
+    });
+});
+
+test("delete developer in an org", async () => {
+  let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
+  let service = new PortalService(org, "");
+  return service
+    .deleteDeveloper("test@example.com")
+    .then((result: { data: ApigeeDeveloper; error: Error }) => {
+      // console.log(JSON.stringify(result));
       let errorCode = -1;
       if (result[1]) {
         errorCode = result[1].error.code;
         console.log(JSON.stringify(result[1]));
       }
       expect(errorCode).toEqual(-1);
-      expect(result[0].apiProducts?.length).toEqual(0);
+      expect(result.data.email).toEqual("test@example.com");
     });
-  }
-});
-
-test("get developer apps", () => {
-  let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
-
-  let service = new PortalService(org, "");
-  return service.getApps("test@example.com").then((result: [ApigeeApps, Error]) => {
-
-    //console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) {
-      errorCode = result[1].error.code;
-      console.log(JSON.stringify(result[1]));
-    }
-    expect(result[0].app.length).toEqual(1);
-    expect(errorCode).toEqual(-1);
-  });
-});
-
-test("delete developer in an org", () => {
-  let org = process.env.GCLOUD_PROJECT ? process.env.GCLOUD_PROJECT : "";
-  let service = new PortalService(org, "");
-  return service.deleteDeveloper("test@example.com").then((result: [ApigeeDeveloper, Error]) => {
-    // console.log(JSON.stringify(result));
-    let errorCode = -1;
-    if (result[1]) {
-      errorCode = result[1].error.code;
-      console.log(JSON.stringify(result[1]));
-    }
-    expect(errorCode).toEqual(-1);
-    expect(result[0].email).toEqual("test@example.com");
-  });
 });
