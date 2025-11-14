@@ -8,6 +8,10 @@ export declare class PortalService {
         data: ApiHubApi[];
         error: Error;
     }>;
+    getApi(apiName: string, org?: string, region?: string): Promise<{
+        data: ApiHubApi[];
+        error: Error;
+    }>;
     getApiVersions(apiName: string, filter?: string, pageSize?: number, pageToken?: string, org?: string, region?: string): Promise<{
         data: ApiHubApiVersion[];
         error: Error;

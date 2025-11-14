@@ -53,6 +53,37 @@ export class PortalService {
             }
         });
     }
+    getApi(apiName_1) {
+        return __awaiter(this, arguments, void 0, function* (apiName, org = "", region = "") {
+            let token = yield auth.getAccessToken();
+            let tempOrg = org ? org : this.org;
+            let tempRegion = region ? region : this.region;
+            let response = yield fetch(`https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return { data: data, error: undefined };
+            }
+            else if (response.status === 404) {
+                return {
+                    data: undefined,
+                    error: {
+                        code: 404,
+                        message: "Could not find api" + apiName,
+                        status: "Not found",
+                    },
+                };
+            }
+            else {
+                let data = yield response.json();
+                return { data: undefined, error: data.error };
+            }
+        });
+    }
     getApiVersions(apiName_1) {
         return __awaiter(this, arguments, void 0, function* (apiName, filter = "", pageSize = 1000, pageToken = "", org = "", region = "") {
             let token = yield auth.getAccessToken();

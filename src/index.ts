@@ -78,6 +78,42 @@ export class PortalService {
     }
   }
 
+  async getApi(
+    apiName: string,
+    org: string = "",
+    region: string = "",
+  ): Promise<{ data: ApiHubApi[]; error: Error }> {
+    let token = await auth.getAccessToken();
+    let tempOrg = org ? org : this.org;
+    let tempRegion = region ? region : this.region;
+    let response = await fetch(
+      `https://apihub.googleapis.com/v1/projects/${tempOrg}/locations/${tempRegion}/apis/${apiName}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (response.status === 200) {
+      let data = await response.json();
+      return { data: data, error: undefined };
+    } else if (response.status === 404) {
+      return {
+        data: undefined,
+        error: {
+          code: 404,
+          message: "Could not find api" + apiName,
+          status: "Not found",
+        },
+      };
+    } else {
+      let data = await response.json();
+      return { data: undefined, error: data.error };
+    }
+  }
+
   async getApiVersions(
     apiName: string,
     filter: string = "",
