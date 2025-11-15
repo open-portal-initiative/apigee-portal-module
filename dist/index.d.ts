@@ -20,6 +20,10 @@ export declare class PortalService {
         data: ApiHubApiVersion;
         error: Error;
     }>;
+    getApiDeployment(apiDeployment: string): Promise<{
+        data: any;
+        error: Error;
+    }>;
     getApiVersionSpecs(apiVersion: string): Promise<{
         data: ApiHubApiVersionSpecContents;
         error: Error;

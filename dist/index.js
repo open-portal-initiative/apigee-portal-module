@@ -145,6 +145,35 @@ export class PortalService {
             }
         });
     }
+    getApiDeployment(apiDeployment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = yield auth.getAccessToken();
+            let response = yield fetch(`https://apihub.googleapis.com/v1/${apiDeployment}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                let data = yield response.json();
+                return { data: data, error: undefined };
+            }
+            else if (response.status === 404) {
+                return {
+                    data: undefined,
+                    error: {
+                        code: 404,
+                        message: "Could not find the API deployment.",
+                        status: "Not found",
+                    },
+                };
+            }
+            else {
+                let data = yield response.json();
+                return { data: undefined, error: data.error };
+            }
+        });
+    }
     // returns the contents of a version spec
     getApiVersionSpecs(apiVersion) {
         return __awaiter(this, void 0, void 0, function* () {

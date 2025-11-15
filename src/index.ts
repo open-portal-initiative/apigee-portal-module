@@ -186,6 +186,38 @@ export class PortalService {
     }
   }
 
+  async getApiDeployment(
+    apiDeployment: string,
+  ): Promise<{ data: any; error: Error }> {
+    let token = await auth.getAccessToken();
+    let response = await fetch(
+      `https://apihub.googleapis.com/v1/${apiDeployment}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (response.status === 200) {
+      let data = await response.json();
+      return { data: data, error: undefined };
+    } else if (response.status === 404) {
+      return {
+        data: undefined,
+        error: {
+          code: 404,
+          message: "Could not find the API deployment.",
+          status: "Not found",
+        },
+      };
+    } else {
+      let data = await response.json();
+      return { data: undefined, error: data.error };
+    }
+  }
+
   // returns the contents of a version spec
   async getApiVersionSpecs(
     apiVersion: string,
