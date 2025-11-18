@@ -557,7 +557,8 @@ export class PortalService {
 
     if (response.status === 200) {
       let data = (await response.json()) as ApigeeApps;
-      return { data: data.app, error: undefined };
+      let resultData = data && data.app ? data.app : [];
+      return { data: resultData, error: undefined };
     } else if (response.status === 404) {
       console.error(
         `Error getApps: ${response.status} - ${response.statusText}`,
